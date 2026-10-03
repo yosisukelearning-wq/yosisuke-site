@@ -3,12 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yosisuke</title>
+  <meta name="description" content="Yosisukeの個人サイト。考えたこと、書いたもの、作ったものをまとめています。">
+  <meta name="theme-color" content="#f5f3ed">
+  <title>Yosisuke — Thinking / Writing / Making</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f3ed;
+      --ink: #202923;
+      --muted: #68736b;
+      --line: #d9ddd4;
+      --green: #466b55;
+      --green-dark: #2d4c39;
+      --soft: #e8ece4;
+      --serif: Georgia, "Times New Roman", "Yu Mincho", "Hiragino Mincho ProN", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.8; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    .page { width: min(100% - 40px, 1080px); margin-inline: auto; }
+    .site-header { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); }
+    .brand { color: var(--ink); font-family: var(--serif); font-size: 1.35rem; font-weight: 700; letter-spacing: .02em; text-decoration: none; }
+    .nav { display: flex; flex-wrap: wrap; gap: 26px; align-items: center; }
+    .nav a { color: var(--muted); font-size: .88rem; text-decoration: none; transition: color .2s ease; }
+    .nav a:hover, .nav a:focus-visible { color: var(--green-dark); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(220px, .65fr); gap: 56px; align-items: center; padding-block: clamp(76px, 12vw, 142px); }
+    .eyebrow { margin: 0 0 18px; color: var(--green); font-size: .76rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 720px; margin-bottom: 22px; font-family: var(--serif); font-size: clamp(2.9rem, 7.5vw, 5.8rem); font-weight: 500; letter-spacing: -.055em; line-height: 1.08; }
+    .hero-copy { max-width: 590px; margin-bottom: 30px; color: #4e5a51; font-size: clamp(1rem, 2vw, 1.12rem); }
+    .hero-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; padding: 10px 18px; border: 1px solid var(--green-dark); border-radius: 3px; background: var(--green-dark); color: #fff; font-size: .9rem; font-weight: 650; text-decoration: none; transition: background .2s ease, transform .2s ease; }
+    .button:hover { background: var(--green); transform: translateY(-1px); }
+    .text-link { padding: 10px 4px; color: var(--green-dark); font-size: .9rem; font-weight: 650; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+    .hero-note { position: relative; padding: 30px 28px 32px; border: 1px solid var(--line); background: rgba(255, 255, 255, .34); }
+    .hero-note::before { position: absolute; top: -1px; left: 28px; width: 42px; height: 3px; background: var(--green); content: ""; }
+    .hero-note-label { margin-bottom: 14px; color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: .13em; }
+    .hero-note p { margin-bottom: 0; font-family: var(--serif); font-size: 1.35rem; line-height: 1.65; }
+    .section { padding-block: 76px; border-top: 1px solid var(--line); scroll-margin-top: 24px; }
+    .section-heading { display: flex; align-items: baseline; gap: 15px; margin-bottom: 28px; }
+    .section-heading h2 { margin: 0; font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 500; letter-spacing: -.03em; }
+    .section-heading span { color: var(--green); font-size: .75rem; font-weight: 700; letter-spacing: .12em; }
+    .section-intro { max-width: 680px; margin-bottom: 30px; color: var(--muted); }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .feature-card { min-height: 176px; padding: 24px; border: 1px solid var(--line); background: rgba(255, 255, 255, .28); }
+    .feature-card .number { display: block; margin-bottom: 20px; color: var(--green); font-family: var(--serif); font-size: .95rem; }
+    .feature-card h3 { margin-bottom: 8px; font-family: var(--serif); font-size: 1.2rem; font-weight: 600; }
+    .feature-card p { margin-bottom: 0; color: var(--muted); font-size: .9rem; }
+    .about-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 48px; align-items: start; }
+    .about-lead { margin: 0; font-family: var(--serif); font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.55; }
+    .about-copy { color: #59645c; }
+    .about-copy p:last-child { margin-bottom: 0; }
+    .link-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .link-card { display: flex; min-height: 108px; align-items: center; justify-content: space-between; gap: 14px; padding: 22px; border: 1px solid var(--line); background: rgba(255, 255, 255, .28); text-decoration: none; transition: border-color .2s ease, background .2s ease; }
+    .link-card:hover { border-color: #91a392; background: var(--soft); }
+    .link-card strong { display: block; font-family: var(--serif); font-size: 1.2rem; }
+    .link-card small { color: var(--muted); }
+    .arrow { color: var(--green); font-size: 1.25rem; }
+    .coming-soon { display: inline-block; padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .8rem; }
+    .site-footer { display: flex; justify-content: space-between; gap: 16px; padding-block: 25px 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; }
+    .site-footer p { margin: 0; }
+    :focus-visible { outline: 3px solid #91a392; outline-offset: 4px; }
+    @media (max-width: 720px) {
+      .page { width: min(100% - 32px, 560px); }
+      .site-header { min-height: 74px; align-items: flex-start; flex-direction: column; justify-content: center; gap: 6px; padding-block: 14px; }
+      .nav { gap: 18px; }
+      .nav a { font-size: .82rem; }
+      .hero { grid-template-columns: 1fr; gap: 34px; padding-block: 72px; }
+      .hero-note { max-width: 440px; }
+      .section { padding-block: 58px; }
+      .feature-grid, .link-list { grid-template-columns: 1fr; }
+      .feature-card { min-height: auto; }
+      .feature-card .number { margin-bottom: 10px; }
+      .about-layout { grid-template-columns: 1fr; gap: 22px; }
+      .site-footer { flex-direction: column; gap: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
 </head>
-
 <body>
-  <h1>Yosisuke</h1>
-  <p>Thinking / Writing / Making</p>
-  <p>個人サイト構築中。</p>
+  <div class="page">
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Yosisuke トップ">Yosisuke</a>
+      <nav class="nav" aria-label="メインナビゲーション">
+        <a href="#blog">Blog</a>
+        <a href="#about">About</a>
+        <a href="#links">Links</a>
+        <a href="#apps">Apps</a>
+      </nav>
+    </header>
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Thinking / Writing / Making</p>
+          <h1 id="hero-title">考え、書き、<br>つくる。</h1>
+          <p class="hero-copy">日々の仕事や暮らしのなかで考えたことを、言葉にして残しています。思考のメモから小さなものづくりまで、活動の入口をここにまとめました。</p>
+          <div class="hero-links">
+            <a class="button" href="#blog">書いたものを見る</a>
+            <a class="text-link" href="#about">このサイトについて →</a>
+          </div>
+        </div>
+        <aside class="hero-note" aria-label="このサイトのテーマ">
+          <p class="hero-note-label">A PLACE TO RETURN TO</p>
+          <p>考えるための軸を持ち、<br>問いをかたちにする。</p>
+        </aside>
+      </section>
+      <section class="section" id="blog" aria-labelledby="blog-title">
+        <div class="section-heading"><h2 id="blog-title">Blog</h2><span>01 / WRITING</span></div>
+        <p class="section-intro">判断や責任、仕事の進め方、日々の気づき。考えたことを文章にしていく場所です。記事一覧はこれから整えていきます。</p>
+        <div class="feature-grid">
+          <article class="feature-card"><span class="number">01</span><h3>思考のこと</h3><p>問いを立て、ものごとの構造を見つめる。</p></article>
+          <article class="feature-card"><span class="number">02</span><h3>仕事のこと</h3><p>現場での判断や、チームで働くことを考える。</p></article>
+          <article class="feature-card"><span class="number">03</span><h3>創作のこと</h3><p>物語やアイデアの断片をかたちにする。</p></article>
+        </div>
+      </section>
+      <section class="section" id="about" aria-labelledby="about-title">
+        <div class="section-heading"><h2 id="about-title">About</h2><span>02 / PROFILE</span></div>
+        <div class="about-layout">
+          <p class="about-lead">考えること、つくること。<br>そのあいだを行き来しています。</p>
+          <div class="about-copy"><p>Yosisukeの個人サイトです。仕事や暮らしのなかで出会った問いを掘り下げ、思考の整理や文章、ちいさなアプリづくりにつなげています。</p><p>この場所を、書いたもの・作ったものへつながる「母艦」として育てていきます。</p></div>
+        </div>
+      </section>
+      <section class="section" id="links" aria-labelledby="links-title">
+        <div class="section-heading"><h2 id="links-title">Links</h2><span>03 / ELSEWHERE</span></div>
+        <p class="section-intro">ほかの場所での活動はこちらから。</p>
+        <div class="link-list">
+          <a class="link-card" href="https://t.co/pTlVfzoc1U" target="_blank" rel="noopener noreferrer"><span><strong>note</strong><small>文章・エッセイ</small></span><span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="link-card" href="https://x.com/yosisuke_san" target="_blank" rel="noopener noreferrer"><span><strong>X</strong><small>日々のメモ</small></span><span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="link-card" href="https://github.com/yosisukelearning-wq/yosisuke-site" target="_blank" rel="noopener noreferrer"><span><strong>GitHub</strong><small>サイトと制作物</small></span><span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+      <section class="section" id="apps" aria-labelledby="apps-title">
+        <div class="section-heading"><h2 id="apps-title">Apps</h2><span>04 / MAKING</span></div>
+        <p class="section-intro">自分の「あったらいいな」から生まれた小さな道具を、ここから紹介していく予定です。</p>
+        <span class="coming-soon">公開アプリは準備中</span>
+      </section>
+    </main>
+    <footer class="site-footer"><p>© 2026 Yosisuke</p><p>Thinking / Writing / Making</p></footer>
+  </div>
 </body>
 </html>
