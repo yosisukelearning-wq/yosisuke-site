@@ -1,150 +1,230 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Yosisukeの個人サイト。考えたこと、書いたもの、作ったものをまとめています。">
-  <meta name="theme-color" content="#f5f3ed">
-  <title>Yosisuke — Thinking / Writing / Making</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --paper: #f5f3ed;
-      --ink: #202923;
-      --muted: #68736b;
-      --line: #d9ddd4;
-      --green: #466b55;
-      --green-dark: #2d4c39;
-      --soft: #e8ece4;
-      --serif: Georgia, "Times New Roman", "Yu Mincho", "Hiragino Mincho ProN", serif;
-      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.8; -webkit-font-smoothing: antialiased; }
-    a { color: inherit; }
-    .page { width: min(100% - 40px, 1080px); margin-inline: auto; }
-    .site-header { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); }
-    .brand { color: var(--ink); font-family: var(--serif); font-size: 1.35rem; font-weight: 700; letter-spacing: .02em; text-decoration: none; }
-    .nav { display: flex; flex-wrap: wrap; gap: 26px; align-items: center; }
-    .nav a { color: var(--muted); font-size: .88rem; text-decoration: none; transition: color .2s ease; }
-    .nav a:hover, .nav a:focus-visible { color: var(--green-dark); }
-    .hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(220px, .65fr); gap: 56px; align-items: center; padding-block: clamp(76px, 12vw, 142px); }
-    .eyebrow { margin: 0 0 18px; color: var(--green); font-size: .76rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-    h1, h2, h3, p { margin-top: 0; }
-    h1 { max-width: 720px; margin-bottom: 22px; font-family: var(--serif); font-size: clamp(2.9rem, 7.5vw, 5.8rem); font-weight: 500; letter-spacing: -.055em; line-height: 1.08; }
-    .hero-copy { max-width: 590px; margin-bottom: 30px; color: #4e5a51; font-size: clamp(1rem, 2vw, 1.12rem); }
-    .hero-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-    .button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; padding: 10px 18px; border: 1px solid var(--green-dark); border-radius: 3px; background: var(--green-dark); color: #fff; font-size: .9rem; font-weight: 650; text-decoration: none; transition: background .2s ease, transform .2s ease; }
-    .button:hover { background: var(--green); transform: translateY(-1px); }
-    .text-link { padding: 10px 4px; color: var(--green-dark); font-size: .9rem; font-weight: 650; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-    .hero-note { position: relative; padding: 30px 28px 32px; border: 1px solid var(--line); background: rgba(255, 255, 255, .34); }
-    .hero-note::before { position: absolute; top: -1px; left: 28px; width: 42px; height: 3px; background: var(--green); content: ""; }
-    .hero-note-label { margin-bottom: 14px; color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: .13em; }
-    .hero-note p { margin-bottom: 0; font-family: var(--serif); font-size: 1.35rem; line-height: 1.65; }
-    .section { padding-block: 76px; border-top: 1px solid var(--line); scroll-margin-top: 24px; }
-    .section-heading { display: flex; align-items: baseline; gap: 15px; margin-bottom: 28px; }
-    .section-heading h2 { margin: 0; font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 500; letter-spacing: -.03em; }
-    .section-heading span { color: var(--green); font-size: .75rem; font-weight: 700; letter-spacing: .12em; }
-    .section-intro { max-width: 680px; margin-bottom: 30px; color: var(--muted); }
-    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .feature-card { min-height: 176px; padding: 24px; border: 1px solid var(--line); background: rgba(255, 255, 255, .28); }
-    .feature-card .number { display: block; margin-bottom: 20px; color: var(--green); font-family: var(--serif); font-size: .95rem; }
-    .feature-card h3 { margin-bottom: 8px; font-family: var(--serif); font-size: 1.2rem; font-weight: 600; }
-    .feature-card p { margin-bottom: 0; color: var(--muted); font-size: .9rem; }
-    .about-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 48px; align-items: start; }
-    .about-lead { margin: 0; font-family: var(--serif); font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.55; }
-    .about-copy { color: #59645c; }
-    .about-copy p:last-child { margin-bottom: 0; }
-    .link-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .link-card { display: flex; min-height: 108px; align-items: center; justify-content: space-between; gap: 14px; padding: 22px; border: 1px solid var(--line); background: rgba(255, 255, 255, .28); text-decoration: none; transition: border-color .2s ease, background .2s ease; }
-    .link-card:hover { border-color: #91a392; background: var(--soft); }
-    .link-card strong { display: block; font-family: var(--serif); font-size: 1.2rem; }
-    .link-card small { color: var(--muted); }
-    .arrow { color: var(--green); font-size: 1.25rem; }
-    .coming-soon { display: inline-block; padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .8rem; }
-    .site-footer { display: flex; justify-content: space-between; gap: 16px; padding-block: 25px 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; }
-    .site-footer p { margin: 0; }
-    :focus-visible { outline: 3px solid #91a392; outline-offset: 4px; }
-    @media (max-width: 720px) {
-      .page { width: min(100% - 32px, 560px); }
-      .site-header { min-height: 74px; align-items: flex-start; flex-direction: column; justify-content: center; gap: 6px; padding-block: 14px; }
-      .nav { gap: 18px; }
-      .nav a { font-size: .82rem; }
-      .hero { grid-template-columns: 1fr; gap: 34px; padding-block: 72px; }
-      .hero-note { max-width: 440px; }
-      .section { padding-block: 58px; }
-      .feature-grid, .link-list { grid-template-columns: 1fr; }
-      .feature-card { min-height: auto; }
-      .feature-card .number { margin-bottom: 10px; }
-      .about-layout { grid-template-columns: 1fr; gap: 22px; }
-      .site-footer { flex-direction: column; gap: 4px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { transition-duration: .01ms !important; }
-    }
-  </style>
-</head>
-<body>
-  <div class="page">
-    <header class="site-header">
-      <a class="brand" href="#top" aria-label="Yosisuke トップ">Yosisuke</a>
-      <nav class="nav" aria-label="メインナビゲーション">
-        <a href="#blog">Blog</a>
-        <a href="#about">About</a>
-        <a href="#links">Links</a>
-        <a href="#apps">Apps</a>
-      </nav>
-    </header>
-    <main id="top">
-      <section class="hero" aria-labelledby="hero-title">
-        <div>
-          <p class="eyebrow">Thinking / Writing / Making</p>
-          <h1 id="hero-title">考え、書き、<br>つくる。</h1>
-          <p class="hero-copy">日々の仕事や暮らしのなかで考えたことを、言葉にして残しています。思考のメモから小さなものづくりまで、活動の入口をここにまとめました。</p>
-          <div class="hero-links">
-            <a class="button" href="#blog">書いたものを見る</a>
-            <a class="text-link" href="#about">このサイトについて →</a>
-          </div>
-        </div>
-        <aside class="hero-note" aria-label="このサイトのテーマ">
-          <p class="hero-note-label">A PLACE TO RETURN TO</p>
-          <p>考えるための軸を持ち、<br>問いをかたちにする。</p>
-        </aside>
-      </section>
-      <section class="section" id="blog" aria-labelledby="blog-title">
-        <div class="section-heading"><h2 id="blog-title">Blog</h2><span>01 / WRITING</span></div>
-        <p class="section-intro">判断や責任、仕事の進め方、日々の気づき。考えたことを文章にしていく場所です。記事一覧はこれから整えていきます。</p>
-        <div class="feature-grid">
-          <article class="feature-card"><span class="number">01</span><h3>思考のこと</h3><p>問いを立て、ものごとの構造を見つめる。</p></article>
-          <article class="feature-card"><span class="number">02</span><h3>仕事のこと</h3><p>現場での判断や、チームで働くことを考える。</p></article>
-          <article class="feature-card"><span class="number">03</span><h3>創作のこと</h3><p>物語やアイデアの断片をかたちにする。</p></article>
-        </div>
-      </section>
-      <section class="section" id="about" aria-labelledby="about-title">
-        <div class="section-heading"><h2 id="about-title">About</h2><span>02 / PROFILE</span></div>
-        <div class="about-layout">
-          <p class="about-lead">考えること、つくること。<br>そのあいだを行き来しています。</p>
-          <div class="about-copy"><p>Yosisukeの個人サイトです。仕事や暮らしのなかで出会った問いを掘り下げ、思考の整理や文章、ちいさなアプリづくりにつなげています。</p><p>この場所を、書いたもの・作ったものへつながる「母艦」として育てていきます。</p></div>
-        </div>
-      </section>
-      <section class="section" id="links" aria-labelledby="links-title">
-        <div class="section-heading"><h2 id="links-title">Links</h2><span>03 / ELSEWHERE</span></div>
-        <p class="section-intro">ほかの場所での活動はこちらから。</p>
-        <div class="link-list">
-          <a class="link-card" href="https://t.co/pTlVfzoc1U" target="_blank" rel="noopener noreferrer"><span><strong>note</strong><small>文章・エッセイ</small></span><span class="arrow" aria-hidden="true">↗</span></a>
-          <a class="link-card" href="https://x.com/yosisuke_san" target="_blank" rel="noopener noreferrer"><span><strong>X</strong><small>日々のメモ</small></span><span class="arrow" aria-hidden="true">↗</span></a>
-          <a class="link-card" href="https://github.com/yosisukelearning-wq/yosisuke-site" target="_blank" rel="noopener noreferrer"><span><strong>GitHub</strong><small>サイトと制作物</small></span><span class="arrow" aria-hidden="true">↗</span></a>
-        </div>
-      </section>
-      <section class="section" id="apps" aria-labelledby="apps-title">
-        <div class="section-heading"><h2 id="apps-title">Apps</h2><span>04 / MAKING</span></div>
-        <p class="section-intro">自分の「あったらいいな」から生まれた小さな道具を、ここから紹介していく予定です。</p>
-        <span class="coming-soon">公開アプリは準備中</span>
-      </section>
-    </main>
-    <footer class="site-footer"><p>© 2026 Yosisuke</p><p>Thinking / Writing / Making</p></footer>
-  </div>
-</body>
-</html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Yosisukeの個人サイト。考えたこと、書いたもの、作ったものをまとめています。"><meta name="theme-color" content="#f5f3ed"><link rel="canonical" href="https://yosisuke.com/"><title>Yosisuke</title><style>
+:root {
+  color-scheme: light;
+  --paper: #f5f3ed;
+  --ink: #202923;
+  --muted: #68736b;
+  --line: #d9ddd4;
+  --green: #466b55;
+  --green-dark: #2d4c39;
+  --soft: #e8ece4;
+  --serif: Georgia, "Times New Roman", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+.page { width: min(100% - 40px, 1080px); margin-inline: auto; }
+.site-header {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-decoration: none;
+}
+.nav { display: flex; flex-wrap: wrap; gap: 26px; }
+.nav a { color: var(--muted); font-size: .88rem; text-decoration: none; }
+.nav a:hover, .nav a:focus-visible, .nav a.is-active { color: var(--green-dark); }
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(220px, .65fr);
+  gap: 56px;
+  align-items: center;
+  padding-block: clamp(76px, 12vw, 142px);
+}
+.eyebrow, .kicker {
+  margin: 0 0 18px;
+  color: var(--green);
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+h1, h2, h3, p { margin-top: 0; }
+h1 {
+  margin-bottom: 22px;
+  font-family: var(--serif);
+  font-size: clamp(2.7rem, 7vw, 5.6rem);
+  font-weight: 500;
+  letter-spacing: -.055em;
+  line-height: 1.08;
+}
+.hero-copy { max-width: 620px; margin-bottom: 30px; color: #4e5a51; font-size: clamp(1rem, 2vw, 1.12rem); }
+.hero-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.button {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border: 1px solid var(--green-dark);
+  border-radius: 3px;
+  background: var(--green-dark);
+  color: #fff;
+  font-size: .9rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+.button:hover { background: var(--green); }
+.text-link { color: var(--green-dark); font-size: .9rem; font-weight: 650; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.hero-note { position: relative; padding: 30px 28px 32px; border: 1px solid var(--line); background: rgba(255, 255, 255, .34); }
+.hero-note::before { position: absolute; top: -1px; left: 28px; width: 42px; height: 3px; background: var(--green); content: ""; }
+.hero-note-label { margin-bottom: 14px; color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: .13em; }
+.hero-note p:last-child { margin-bottom: 0; font-family: var(--serif); font-size: 1.35rem; line-height: 1.65; }
+.section { padding-block: 76px; border-top: 1px solid var(--line); }
+.section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 28px; }
+.section-heading h2 { margin: 0; font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 500; letter-spacing: -.03em; }
+.section-intro { max-width: 700px; margin-bottom: 34px; color: var(--muted); }
+.page-header { padding-block: 78px 54px; }
+.page-header h1 { font-size: clamp(2.7rem, 6vw, 4.8rem); }
+.page-header p { max-width: 680px; color: var(--muted); font-size: 1.05rem; }
+.article-list { display: grid; gap: 0; }
+.article-card { padding-block: 34px; border-top: 1px solid var(--line); }
+.article-card:last-child { border-bottom: 1px solid var(--line); }
+.article-card h3 { max-width: 760px; margin-bottom: 12px; font-family: var(--serif); font-size: clamp(1.45rem, 3vw, 2rem); font-weight: 550; line-height: 1.35; }
+.article-card h3 a { text-decoration: none; }
+.article-card h3 a:hover { color: var(--green-dark); }
+.article-card p { max-width: 720px; margin-bottom: 14px; color: var(--muted); }
+.article-meta { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-bottom: 10px; color: var(--muted); font-size: .76rem; letter-spacing: .04em; }
+.external-badge { color: var(--green-dark); font-weight: 700; }
+.thinking-grid, .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.thinking-item, .project-card { padding: 24px; border: 1px solid var(--line); background: rgba(255, 255, 255, .28); }
+.thinking-item strong, .project-card h3 { display: block; margin-bottom: 8px; font-family: var(--serif); font-size: 1.2rem; }
+.thinking-item span, .project-card p { color: var(--muted); font-size: .9rem; }
+.project-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.pill { padding: 3px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .72rem; }
+.article-shell { width: min(100%, 760px); margin-inline: auto; padding-block: 76px; }
+.article-header { margin-bottom: 52px; }
+.article-header h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); }
+.article-header .description { color: var(--muted); font-size: 1.05rem; }
+.prose { font-size: 1.02rem; }
+.prose h2 { margin-top: 3.2rem; margin-bottom: 1rem; font-family: var(--serif); font-size: 1.8rem; font-weight: 600; }
+.prose h3 { margin-top: 2.4rem; font-family: var(--serif); }
+.prose p, .prose ul, .prose ol { margin-bottom: 1.35rem; }
+.prose blockquote { margin: 2rem 0; padding: 1rem 1.4rem; border-left: 3px solid var(--green); color: #4e5a51; background: rgba(255,255,255,.25); }
+.back-link { display: inline-block; margin-top: 48px; }
+.about-grid { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: 54px; padding-bottom: 76px; }
+.about-lead { font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.6; }
+.about-copy { color: #59645c; }
+.about-copy h2 { margin-top: 2.4rem; color: var(--ink); font-family: var(--serif); }
+.site-footer { display: flex; justify-content: space-between; gap: 18px; padding-block: 28px 36px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; }
+.site-footer p { margin: 0; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 16px; }
+.footer-links a { text-decoration: none; }
+:focus-visible { outline: 3px solid #91a392; outline-offset: 4px; }
+@media (max-width: 720px) {
+  .page { width: min(100% - 32px, 560px); }
+  .site-header { min-height: 74px; align-items: flex-start; flex-direction: column; justify-content: center; gap: 6px; padding-block: 14px; }
+  .nav { gap: 18px; }
+  .hero { grid-template-columns: 1fr; gap: 34px; padding-block: 70px; }
+  .section { padding-block: 56px; }
+  .thinking-grid, .project-grid, .about-grid { grid-template-columns: 1fr; }
+  .about-grid { gap: 22px; }
+  .site-footer { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+section[id], article[id] { scroll-margin-top: 24px; }
+</style></head>
+<body><div class="page"><header class="site-header"><a class="brand" href="#" aria-label="Yosisuke トップ">Yosisuke</a><nav class="nav" aria-label="メインナビゲーション"><a href="#writing">Writing</a><a href="#making">Making</a><a href="#about">About</a></nav></header><main>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Thinking / Writing / Making</p>
+      <h1>考え、書き、<br />つくる。</h1>
+      <p class="hero-copy">日々の仕事や暮らしのなかで出会った問いを掘り下げ、文章や小さなものづくりに変えていく。その活動の入口をここにまとめています。</p>
+      <div class="hero-links">
+        <a class="button" href="#writing">Writingを見る</a>
+        <a class="text-link" href="#about">このサイトについて →</a>
+      </div>
+    </div>
+    <aside class="hero-note" aria-label="このサイトの考え方">
+      <p class="hero-note-label">THINKING → WRITING / MAKING</p>
+      <p>思考を、言葉と<br />かたちにする。</p>
+    </aside>
+  </section>
+
+  <section class="section" id="writing"><div class="section-heading"><h2>Latest Writing</h2>
+      <a class="text-link" href="#writing">View all →</a>
+    </div>
+    <div class="article-list">
+      <article class="article-card"><div class="article-meta"><time datetime="2026-10-06">2026/10/06</time><span>Thinking</span></div><h3><a href="#judgment-needs-reference-point">判断には基準点が必要である</a></h3><p>人が判断できない原因は、選択肢不足ではなく、比較するための基準点が存在しないことにある場合が多い。</p><a class="text-link" href="#judgment-needs-reference-point">Read →</a></article>
+    </div>
+  </section>
+
+  <section class="section" id="making"><div class="section-heading"><h2>Making</h2>
+      <a class="text-link" href="#making">View projects →</a>
+    </div>
+    <div class="project-grid">
+      <article class="project-card">
+        <div class="project-meta"><span class="pill">Web App</span><span class="pill">Prototype</span></div>
+        <h3>AI Relay</h3>
+        <p>複数のAIをつなぎ、入力した考えを段階的にブラッシュアップするためのWebアプリ。</p>
+      </article>
+      <article class="project-card">
+        <div class="project-meta"><span class="pill">Knowledge</span><span class="pill">Workflow</span></div>
+        <h3>Knowledge Workflow</h3>
+        <p>会話やメモを、再利用できる意味単位へ分解し、関係づけて育てるための仕組み。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-heading"><h2>Currently Thinking About</h2></div>
+    <div class="thinking-grid">
+      <div class="thinking-item"><strong>判断軸</strong><span>人は何を基準に比較し、決めるのか。</span></div>
+      <div class="thinking-item"><strong>責任と権限</strong><span>組織のなかで責任をどう引き受けるか。</span></div>
+      <div class="thinking-item"><strong>AIと人間の判断</strong><span>AI時代に、人が持つべき判断軸とは何か。</span></div>
+      <div class="thinking-item"><strong>構造化</strong><span>複雑なものを、意味を失わず単純にする。</span></div>
+    </div>
+  </section>
+
+
+<article id="judgment-needs-reference-point" class="article-shell"><header class="article-header"><p class="kicker">Thinking / Writing</p><h1>判断には基準点が必要である</h1><time datetime="2026-10-06">2026/10/06</time></header><div class="prose"><p>人が判断できない原因は、選択肢不足ではなく、<strong>比較するための基準点が存在しないこと</strong>にある場合が多い。</p>
+<h2>比較には座標系がいる</h2>
+<p>AとBを比較するには、「何をもって良いとするか」という座標系が必要になる。</p>
+<p>選択肢だけを増やしても、評価する軸が曖昧なままなら迷いは減らない。むしろ比較対象が増えるほど、判断は難しくなる。</p>
+<h2>技術判断で起きたこと</h2>
+<p>開発要素のある工法を、そのまま量産へ進めるか、いったん開発として棚入れするかを判断する場面があった。</p>
+<p>難しかったのは、<strong>物理的に成立すること</strong>と、<strong>量産として安定して成立すること</strong>を同じ軸で扱っていたことだった。</p>
+<p>そこで、設備能力や基礎開発で得られた工程条件を基準点として置き直した。すると「できるか」ではなく、「どこまで成立していて、どこから先が量産上のリスクなのか」を分けて考えられるようになった。</p>
+<h2>判断の前に問うこと</h2>
+<p>判断に迷ったとき、最初に問うべきなのは「選択肢は何か」ではない。</p>
+<blockquote><p>何を基準として比較するのか。</p></blockquote>
+<p>帰る場所となる基準点が定まると、選択肢は初めて意味を持つ。</p></div><a class="text-link back-link" href="#writing">Writingへ戻る ↑</a></article>
+<section id="about" class="section">
+  <header class="page-header">
+    <p class="kicker">About</p>
+    <h1>考えることと、<br />つくることのあいだ。</h1>
+  </header>
+  <section class="about-grid">
+    <p class="about-lead">日々出会う問いを、構造として捉え、言葉や小さな制作物へ変えていきます。</p>
+    <div class="about-copy">
+      <p>Yosisukeの個人サイトです。仕事や暮らしのなかで考えたことを、文章やWebアプリなどの形で残しています。</p>
+      <p>このサイトは、外部サービスに散らばる活動も含めて辿れる「母艦」として育てていきます。</p>
+      <h2>Thinking</h2><p>問いを立て、比較する基準を探し、複雑なものの構造を捉える。</p>
+      <h2>Writing</h2><p>考えたことを文章として編集し、自サイトやnoteで公開する。</p>
+      <h2>Making</h2><p>考えを試すために、Webアプリや小さな仕組みとして実装する。</p>
+    </div>
+  </section>
+</section>
+
+</main><footer class="site-footer"><p>© 2026 Yosisuke</p><div class="footer-links"><a href="https://t.co/pTlVfzoc1U" target="_blank" rel="noopener noreferrer">note ↗</a><a href="https://x.com/yosisuke_san" target="_blank" rel="noopener noreferrer">X ↗</a><a href="https://github.com/yosisukelearning-wq" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></footer></div></body></html>
